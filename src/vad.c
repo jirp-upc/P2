@@ -5,7 +5,7 @@
 #include "pav_analysis.h"
 #include "vad.h"
 
-const float FRAME_TIME = 10.0F; /* in ms. */
+const float FRAME_TIME = 92.0F; /* in ms. */
 
 /* 
  * As the output state is only ST_VOICE, ST_SILENCE, or ST_UNDEF,
@@ -26,6 +26,7 @@ typedef struct {
   float zcr;
   float p;
   float am;
+
 } Features;
 
 /* 
@@ -46,13 +47,7 @@ Features compute_features(const float *x, int N) {
   //feat.zcr = feat.p = feat.am = (float) rand()/RAND_MAX;
   feat.zcr = compute_zcr(x,N,16000);
   feat.am = compute_am(x,N);
-  float w[N];
-  float consta = 0;
-  for(int i=0;i<N;i++){
-    w[i] = hamming_window(i,N);
-    consta += w[i]*w[i];
-  }
-  feat.p = compute_power(x, N, consta, w);
+  feat.p = compute_power(x, N);
   return feat;
 }
 
@@ -60,11 +55,13 @@ Features compute_features(const float *x, int N) {
  * TODO: Init the values of vad_data
  */
 
-VAD_DATA * vad_open(float rate) {
+VAD_DATA * vad_open(float rate, float alpha1) {
   VAD_DATA *vad_data = malloc(sizeof(VAD_DATA));
   vad_data->state = ST_INIT;
   vad_data->sampling_rate = rate;
   vad_data->frame_length = rate * FRAME_TIME * 1e-3;
+  vad_data->alpha1 = alpha1;
+  vad_data->init_time = 200*1e-3;
   return vad_data;
 }
 
@@ -100,7 +97,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
   switch (vad_data->state) {
   case ST_INIT:
     vad_data->state = ST_SILENCE;         //Primera iteración, vamos a silencio
-    vad_data->p1 f.p+10;
+    vad_data->p1 = f.p+vad_data->alpha1;
     break;
 
   case ST_SILENCE:
