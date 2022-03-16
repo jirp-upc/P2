@@ -22,7 +22,7 @@ typedef struct {
   float init_time; // = 200*1e-3; //Tiempo de margen de silencio inicial
   unsigned int count; //contador de estados maybe consecutivos 
   float time_elapsed; //tiempo que ha pasado (crono)
-  float time_unknown; //tiempo que lleva en estado desconocido actual
+  float max_time_unknown; //tiempo máximo de maybe
   VAD_STATE last_state_known; //último estado determinado
 } VAD_DATA;
 
