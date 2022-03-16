@@ -19,8 +19,9 @@ typedef struct {
   float p1; // == k1
   float p0; // == k0
   float alpha1;
-  float init_time; //Tiempo de margen de silencio inicial
-  unsigned int count_sil;
+  float init_time; // = 200*1e-3; //Tiempo de margen de silencio inicial
+  unsigned int count; //contador de estados maybe consecutivos 
+  float time_elapsed; //tiempo que ha pasado
 } VAD_DATA;
 
 /* Call this function before using VAD: 
