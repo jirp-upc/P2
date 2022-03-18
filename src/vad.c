@@ -63,7 +63,7 @@ VAD_DATA * vad_open(float rate, float alpha1) {
   vad_data->alpha1 = alpha1;
   vad_data->init_time = 200*1e-3;
   vad_data->count = 0;
-  vad_data->max_time_unknown = 50*1e-3;
+  vad_data->max_time_unknown = 100*1e-3;
   vad_data->time_elapsed = 0;
   return vad_data;
 }
@@ -121,7 +121,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   case ST_UNDEF:
     vad_data->count++;
-    if(vad_data->count*vad_data->frame_length > vad_data->max_time_unknown){
+    if(vad_data->count*FRAME_TIME > vad_data->max_time_unknown){
       if (f.p < vad_data->p1) vad_data->state = ST_VOICE;
       else vad_data->state = ST_SILENCE;
       vad_data->last_state_known = ST_UNDEF; //Para debug, no afecta funcionamiento esta asignación.
