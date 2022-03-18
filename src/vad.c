@@ -5,7 +5,7 @@
 #include "pav_analysis.h"
 #include "vad.h"
 
-const float FRAME_TIME = 92.0F; /* in ms. */
+const float FRAME_TIME = 10.0F; /* in ms. */
 
 /* 
  * As the output state is only ST_VOICE, ST_SILENCE, or ST_UNDEF,
@@ -64,6 +64,7 @@ VAD_DATA * vad_open(float rate, float alpha1) {
   vad_data->init_time = 200*1e-3;
   vad_data->count = 0;
   vad_data->max_time_unknown = 50*1e-3;
+  vad_data->time_elapsed = 0;
   return vad_data;
 }
 
@@ -104,7 +105,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
   case ST_SILENCE:
     if(vad_data->time_elapsed > vad_data->init_time){     //Si supera margen inicial,
       if (f.p > vad_data->p1){      //Si potencia > 0.95, ¿es voz?
-        vad_data->state = ST_VOICE; 
+        vad_data->state = ST_UNDEF; 
         vad_data->last_state_known = ST_SILENCE;
       } 
     }   
@@ -113,7 +114,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
 
   case ST_VOICE:
     if (f.p < vad_data->p1){                       //Si potencia < 0.01, ¿es silencio?
-      vad_data->state = ST_SILENCE;
+      vad_data->state = ST_UNDEF;
       vad_data->last_state_known = ST_VOICE;
     }
     break;
@@ -128,7 +129,7 @@ VAD_STATE vad(VAD_DATA *vad_data, float *x) {
     }
     break;
   }
-  vad_data->time_elapsed += vad_data->frame_length; //Actualización crono
+  vad_data->time_elapsed += FRAME_TIME*1e-3; //Actualización crono
 
   if (vad_data->state == ST_SILENCE ||
       vad_data->state == ST_VOICE)
