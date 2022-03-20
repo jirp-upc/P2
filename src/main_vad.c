@@ -90,12 +90,18 @@ int main(int argc, char *argv[])
     if ((n_read = sf_read_float(sndfile_in, buffer, frame_size)) != frame_size)
       break;
 
-    if (sndfile_out != 0)
-    {
-      /* TODO: copy all the samples into sndfile_out */
-    }
+
 
     state = vad(vad_data, buffer);
+        if (sndfile_out != 0)
+    {
+        if (state== ST_VOICE){
+          sf_write_float(sndfile_out,buffer, frame_size);
+        } else{
+          sf_write_float(sndfile_out,buffer_zeros, frame_size);
+        }
+      /* TODO: copy all the samples into sndfile_out */
+    }
     if (verbose & DEBUG_VAD)
       vad_show_state(vad_data, stdout);
 
@@ -119,7 +125,7 @@ int main(int argc, char *argv[])
   state = vad_close(vad_data);
   /* TODO: what do you want to print, for last frames? */
   if (t != last_t)
-    fprintf(vadfile, "%.5f\t%.5f\t%s\n", last_t * frame_duration, t * frame_duration + n_read / (float)sf_info.samplerate, state2str(/*state*/ST_SILENCE));
+    fprintf(vadfile, "%.5f\t%.5f\t%s\n", last_t * frame_duration, t * frame_duration + n_read / (float)sf_info.samplerate, state2str(ST_SILENCE));
 
   /* clean up: free memory, close open files */
   free(buffer);

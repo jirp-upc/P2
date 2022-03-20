@@ -106,14 +106,43 @@ Ejercicios
   potencia y la tasa de cruces por cero, junto con el etiquetado manual de los segmentos.
 
 
+>En la siguiente imagen podemos ver:
+>
+><img src="img/img1.png" width="840" align="center"><br>
+> * El waveform
+> * Su potencia 
+> * La tasa de cruces por cero
+> * La trascripción de audio manual
+
+
+
+
+
 - A la vista de la gráfica, indique qué valores considera adecuados para las magnitudes siguientes:
 
 	* Incremento del nivel potencia en dB, respecto al nivel correspondiente al silencio inicial, para
 	  estar seguros de que un segmento de señal se corresponde con voz.
 
-	* Duración mínima razonable de los segmentos de voz y silencio.
+	  >>En lo que refiere a este tramo de voz específico, supondría una casuística algo especial, puesto que al principio de la grabación parece producirse un ruido al iniciar la grabación. Parece ser que un umbral óptimo para este tramo específicamente sería algo alrededor de <span style="color:cyan">-40dB</span>
+
+	  >>El incremento de potencia en dB que hemos elegido es de <span style="color:cyan">5.64 dB</span> con el algoritmo que se detalla seguidamente: 
+	<img src="img/img2.png" width="1000" align="center"><br>
+	<img src="img/img3.png" width="1000" align="center"><br>
+	  Al tratarse de decibelios (trabajando con logaritmos), vemos que no es significativo trabajar con más cifras decimales:
+	  <img src="img/img4.png" width="1000" align="center"><br>
+	<img src="img/img5.png" width="1000" align="center"><br>
+
+	* Duración mínima razonable de los segmentos de voz y silencio.  
+
+		>>La duración mínima de los segmentos de voz razonable es de <span style="color:cyan">ALGO</span> 
+
+		>>La duración mínima de los segmentos de silencio debe ser mayor que un lapso que ha de determinarse según la duración de sonidos sordos y pausas máximas que se puedan producir en tramos de habla. En este fragmento de audio, por ejemplo, llegan a verse pausas de unos <span style="color:cyan">50ms</span> en tramos vocálicos.
+	
 
 	* ¿Es capaz de sacar alguna conclusión a partir de la evolución de la tasa de cruces por cero?
+		>>En tramos vocales, podemos distinguir entre fonemas sordos y sonoros, pero es difícil sacar una conclusión a partir del medidor ZCR para realizar una distinción entre tramos vocales y silencio
+
+
 
 
 ### Desarrollo del detector de actividad vocal
@@ -124,12 +153,20 @@ Ejercicios
 - Inserte una gráfica en la que se vea con claridad la señal temporal, el etiquetado manual y la detección
   automática conseguida para el fichero grabado al efecto. 
 
+	<img src="img/img6.png" width="1000" align="center"><br>
+	> * .lab corresponde al fichero con la transcripción humana
+	> * .aut corresponde al fichero generado con nuestro intérprete
+	
 
 - Explique, si existen. las discrepancias entre el etiquetado manual y la detección automática.
+	>Se ha establecido un umbral sin determinar tiempos de margen, es decir, se han utilizado tan sólo dos estados. Inicialmente, se había establecido un estado indefinido en el que se tenían en cuenta tiempos de margen para determinar si realmente la superioridad/inferioridad correspondía a un transitorio o correspondía a una pequeña anomalía esporádica, pero hemos conseguido mucho mejores porcentajes de acierto con la base de datos con el código presentado.
 
 - Evalúe los resultados sobre la base de datos `db.v4` con el script `vad_evaluation.pl` e inserte a 
   continuación las tasas de sensibilidad (*recall*) y precisión para el conjunto de la base de datos (sólo
   el resumen).
+
+<img src="img/img7.png" width="1000" align="center"><br>
+  
 
 
 ### Trabajos de ampliación
@@ -139,6 +176,8 @@ Ejercicios
 - Si ha desarrollado el algoritmo para la cancelación de los segmentos de silencio, inserte una gráfica en
   la que se vea con claridad la señal antes y después de la cancelación (puede que `wavesurfer` no sea la
   mejor opción para esto, ya que no es capaz de visualizar varias señales al mismo tiempo).
+
+<img src="img/img8.png" width="1000" align="center"><br>
 
 #### Gestión de las opciones del programa usando `docopt_c`
 
@@ -153,6 +192,8 @@ Ejercicios
 
 - Si lo desea, puede realizar también algún comentario acerca de la realización de la práctica que
   considere de interés de cara a su evaluación.
+
+  >Considere consultar los commits realizados anteriormente; parecíamos cerca de conseguir un análisis más preciso. Téngase en cuenta también que el fichero de audio que hemos grabado presenta un gran ruido al principio, casuística que hace presentar los peores resultados con esta algoritmia (contrastada con un buen resultado, como se ha podido ver en el análisis con la base de datos).
 
 
 ### Antes de entregar la práctica
