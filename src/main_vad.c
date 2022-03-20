@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
   DocoptArgs args = docopt(argc, argv, /* help */ 1, /* version */ "2.0");
 
-  system("./bin/p1");
+  //system(strcpy("./bin/p1 ", args.input_wav, " tmp.pot"));
 
   verbose = args.verbose ? DEBUG_VAD : 0;
   input_wav = args.input_wav;

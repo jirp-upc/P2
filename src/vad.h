@@ -24,6 +24,10 @@ typedef struct {
   float time_elapsed; //tiempo que ha pasado (crono)
   float max_time_unknown; //tiempo máximo de maybe
   VAD_STATE last_state_known; //último estado determinado
+  unsigned int frames_silence_counted;
+  unsigned int sil_calc;  //indicador de si ya hay umbral calculado
+  float first_feature; //backup en caso de que no haya ni una muestra válida para calcular umbral
+
 } VAD_DATA;
 
 /* Call this function before using VAD: 
